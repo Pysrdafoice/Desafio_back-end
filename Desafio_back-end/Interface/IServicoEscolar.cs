@@ -12,7 +12,6 @@ namespace Desafio_back_end
         (string Materia, List<string> Turma) GerarTurmaEComMateriaAleatoria();
         Dictionary<string, double> GerarNotas12Materias();
     }
-
     public class ServicoEscolar : IServicoEscolar
     {
         private Dictionary<string, Aluno> dicionarioAlunos = new Dictionary<string, Aluno>();

@@ -16,6 +16,7 @@ namespace Desafio_back_end
             {
                 try
                 {
+                    Console.Clear();
                     Console.WriteLine("\n*** SISTEMA ESCOLAR ***");
                     Console.WriteLine("1 - ÁREA DO ALUNO");
                     Console.WriteLine("2 - ÁREA DO PROFESSOR");
@@ -23,6 +24,7 @@ namespace Desafio_back_end
                     Console.Write("Escolha uma opção: ");
 
                     string opcao = Console.ReadLine();
+                    
 
                     switch (opcao)
                     {
@@ -44,6 +46,7 @@ namespace Desafio_back_end
         {
             try
             {
+                Console.Clear();
                 Console.WriteLine("\n--- MENU PROFESSOR ---");
                 Console.WriteLine("1 - Registrar Aluno");
                 Console.WriteLine("2 - Lançar Nota");
@@ -64,6 +67,7 @@ namespace Desafio_back_end
         {
             try
             {
+                Console.Clear();
                 Console.WriteLine("\n--- REGISTRO DE ALUNO ---");
                 Console.Write("Digite o Nome do Aluno: ");
                 string nome = Console.ReadLine();
@@ -132,6 +136,7 @@ namespace Desafio_back_end
         {
             try
             {
+                Console.Clear();
                 Console.WriteLine("\n--- MENU ALUNO ---");
                 Console.WriteLine("1 - Verificar Turma e Matéria Aleatória");
                 Console.WriteLine("2 - Consultar Notas por Matrícula");
@@ -219,6 +224,7 @@ namespace Desafio_back_end
         static void ExibirDicionarioAlunos()
         {
             var dict = servico.ObterAlunos();
+            Console.Clear();
             Console.WriteLine($"\n==================================================");
             Console.WriteLine($" DICIONÁRIO DE ALUNOS (Total Cadastrado: {dict.Count})");
             Console.WriteLine($"==================================================");

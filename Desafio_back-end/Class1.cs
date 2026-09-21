@@ -9,7 +9,6 @@ namespace Desafio_back_end
         public string CPF { get; set; }
         public DateTime DataDeNascimento { get; set; }
     }
-
     public class Aluno : Pessoa
     {
         public string Matricula { get; set; }
