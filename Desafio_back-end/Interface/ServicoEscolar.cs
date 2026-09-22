@@ -6,7 +6,6 @@ namespace Desafio_back_end.Interface
     public class ServicoEscolar : IServicoEscolar
     {
         private Dictionary<string, Aluno> dicionarioAlunos = new Dictionary<string, Aluno>();
-        private Dictionary<string, Professor> dicionarioProfessores = new Dictionary<string, Professor>();
         private Random random = new Random();
 
         private readonly string[] materias = new string[]
@@ -96,31 +95,7 @@ namespace Desafio_back_end.Interface
 
         // ===================== PROFESSORES =====================
 
-        public Dictionary<string, Professor> ObterProfessores() => dicionarioProfessores;
-
-        public Professor BuscarProfessor(string matricula)
-        {
-            dicionarioProfessores.TryGetValue(matricula, out var professor);
-            return professor;
-        }
-
-        public string CadastrarProfessor(string nome, string cpf, DateTime dataNascimento, double salario, List<string> turmas)
-        {
-            string matricula = GerarMatriculaAleatoria();
-
-            Professor novoProfessor = new Professor
-            {
-                Nome = nome,
-                CPF = cpf,
-                DataDeNascimento = dataNascimento,
-                Matricula = matricula,
-                Salario = salario,
-                Turmas = turmas ?? new List<string>()
-            };
-
-            dicionarioProfessores.Add(matricula, novoProfessor);
-            return matricula;
-        }
+    
 
         // ===================== AUXILIARES =====================
 
@@ -130,7 +105,7 @@ namespace Desafio_back_end.Interface
             do
             {
                 matricula = random.Next(100000, 1000000).ToString();
-            } while (dicionarioAlunos.ContainsKey(matricula) || dicionarioProfessores.ContainsKey(matricula));
+            } while (dicionarioAlunos.ContainsKey(matricula));
 
             return matricula;
         }

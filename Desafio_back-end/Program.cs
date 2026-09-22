@@ -95,9 +95,21 @@ namespace Desafio_back_end
             try
             {
                 Console.WriteLine("\n--- REGISTRO DE ALUNO ---");
+
                 Console.Write("Digite o Nome do Aluno: ");
                 string nome = Console.ReadLine();
                 ValidarNome(nome);
+
+                Console.Write("Digite o CPF do Aluno (somente números): ");
+                string cpf = Console.ReadLine();
+                if (!Regex.IsMatch(cpf, @"^\d{11}$"))
+                    throw new ArgumentException("CPF inválido! Deve conter exatamente 11 dígitos numéricos.");
+
+                Console.Write("Digite a Data de Nascimento (dd/mm/aaaa): ");
+                if (!DateTime.TryParse(Console.ReadLine(), out DateTime dataNascimento))
+                {
+                    throw new ArgumentException("Data de nascimento inválida! Use o formato dd/mm/aaaa.");
+                }
 
                 Console.Write("Informe o Ano Letivo do Aluno (1, 2 ou 3): ");
                 string ano = Console.ReadLine();
@@ -114,7 +126,7 @@ namespace Desafio_back_end
                 if (!Regex.IsMatch(letraTurma, @"^[a-cA-C]$"))
                     throw new ArgumentException("Turma inválida! Escolha entre A, B ou C.");
 
-                string matriculaGerada = servico.CadastrarAluno(nome, ano, turno, letraTurma);
+                string matriculaGerada = servico.CadastrarAluno(nome, cpf, dataNascimento, ano, turno, letraTurma);
 
                 Console.WriteLine($"\nALUNO CADASTRADO COM SUCESSO!");
                 Console.WriteLine($"Matrícula Gerada: {matriculaGerada}");
