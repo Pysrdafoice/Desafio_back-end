@@ -2,11 +2,30 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Desafio_back_end
+
+namespace Desafio_back_end.Models
 {
     public class Professor : Pessoa
     {
-        public double Salario { get; set; }
-        public List<string> Turmas { get; set; } = new List<string>();
+        public const double SalarioBase = 3500.00;
+
+        public List<string> Turmas { get; set; }
+            = new List<string>();
+
+        public Professor(
+            string nome,
+            string cpf,
+            DateTime dataNascimento)
+            : base(nome, cpf, dataNascimento)
+        {
+        }
+
+        protected override void RegistrarPessoa(
+            string nome,
+            string cpf,
+            DateTime dataNascimento)
+        {
+            base.RegistrarPessoa(nome, cpf, dataNascimento);
+        }
     }
 }
