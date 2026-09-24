@@ -1,28 +1,36 @@
-﻿using Desafio_back_end.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using Desafio_back_end.Models;
+using Desafio_back_end.Services;
 
 namespace Desafio_back_end
 {
     internal class MenuAluno
     {
+        private readonly IServicoEscolar servico;
 
-        // =========================
-        // MENU ALUNO
-        // =========================
 
-        static void MenuAluno()
+        public MenuAluno(IServicoEscolar servico)
+        {
+            this.servico = servico;
+        }
+
+
+        public void menuAluno()
         {
             string opcaoAluno = "";
-
 
             do
             {
                 try
                 {
                     Console.WriteLine(
-                        "\n--- MENU ALUNO ---");
+                        "\n=================================");
+
+                    Console.WriteLine(
+                        "          MENU ALUNO");
+
+                    Console.WriteLine(
+                        "=================================");
 
                     Console.WriteLine(
                         "1 - Verificar Turma");
@@ -33,14 +41,11 @@ namespace Desafio_back_end
                     Console.WriteLine(
                         "0 - Voltar ao Menu Principal");
 
-
                     Console.Write(
                         "Escolha uma opção: ");
 
-
                     opcaoAluno =
                         Console.ReadLine() ?? "";
-
 
                     switch (opcaoAluno)
                     {
@@ -72,135 +77,129 @@ namespace Desafio_back_end
         }
 
 
-        // =========================
-        // TURMA DO ALUNO
-        // =========================
+        // ============================================================
+        // TURMA
+        // ============================================================
 
-        static void ExibirTurmaAluno()
+        private void ExibirTurmaAluno()
         {
             try
             {
                 Console.WriteLine(
-                    "\n--- VERIFICAR TURMA DO ALUNO ---");
-
+                    "\n--- VERIFICAR TURMA ---");
 
                 Console.Write(
-                    "Informe sua Matrícula " +
-                    "(6 dígitos): ");
-
+                    "Informe sua matrícula: ");
 
                 string matricula =
                     Console.ReadLine() ?? "";
 
-
-                ValidarMatriculaFormat(
+                Program.ValidarMatriculaFormat(
                     matricula);
 
-
                 Aluno aluno =
-                    servico.BuscarAluno(
-                        matricula);
-
+                    servico.BuscarAluno(matricula);
 
                 if (aluno == null)
                 {
                     Console.WriteLine(
                         "\nMatrícula não cadastrada!");
 
+                    Console.ReadLine();
                     return;
                 }
-
 
                 var dadosTurma =
                     servico.ObterTurmaComMateria(
                         aluno.CodigoTurma);
 
+                Console.WriteLine(
+                    "\n=================================");
 
                 Console.WriteLine(
-                    "\n==================================================");
+                    $"Aluno: {aluno.Nome}");
 
                 Console.WriteLine(
-                    $" ALUNO: {aluno.Nome} " +
-                    $"| MATRÍCULA: {aluno.Matricula}");
+                    $"Matrícula: {aluno.Matricula}");
 
                 Console.WriteLine(
-                    $" TURMA: {aluno.CodigoTurma} " +
-                    $"| MATÉRIA SORTEADA: " +
+                    $"Turma: {aluno.CodigoTurma}");
+
+                Console.WriteLine(
+                    $"Matéria: " +
                     $"{NomeMateria(dadosTurma.Materia)}");
 
                 Console.WriteLine(
-                    "==================================================");
-
+                    "=================================");
 
                 Console.WriteLine(
-                    $" LISTA DE ALUNOS DA TURMA " +
-                    $"({dadosTurma.Colegas.Count} Integrantes):");
+                    "\nALUNOS DA TURMA:");
 
-
-                foreach (
-                    string colega
+                foreach (string colega
                     in dadosTurma.Colegas)
                 {
                     Console.WriteLine(
-                        $" - {colega}");
+                        $"- {colega}");
                 }
+
+                Console.WriteLine(
+                    "\nPressione ENTER para continuar.");
+
+                Console.ReadLine();
             }
             catch (FormatException ex)
             {
                 Console.WriteLine(
                     $"\n[Erro de Formato]: " +
                     $"{ex.Message}");
+
+                Console.ReadLine();
             }
             catch (ArgumentException ex)
             {
                 Console.WriteLine(
                     $"\n[Erro de Validação]: " +
                     $"{ex.Message}");
+
+                Console.ReadLine();
             }
         }
 
 
-        // =========================
-        // NOTAS DO ALUNO
-        // =========================
+        // ============================================================
+        // NOTAS
+        // ============================================================
 
-        static void ExibirNotasAluno()
+        private void ExibirNotasAluno()
         {
             try
             {
                 Console.WriteLine(
                     "\n--- CONSULTA DE NOTAS ---");
 
-
                 Console.Write(
-                    "Informe sua Matrícula " +
-                    "(6 dígitos): ");
-
+                    "Informe sua matrícula: ");
 
                 string matricula =
                     Console.ReadLine() ?? "";
 
-
-                ValidarMatriculaFormat(
+                Program.ValidarMatriculaFormat(
                     matricula);
 
-
                 Aluno aluno =
-                    servico.BuscarAluno(
-                        matricula);
-
+                    servico.BuscarAluno(matricula);
 
                 if (aluno == null)
                 {
                     Console.WriteLine(
                         "\nMatrícula não cadastrada!");
 
+                    Console.ReadLine();
                     return;
                 }
 
-
                 Console.WriteLine(
-                    "\n========================================");
+                    "\n=================================");
 
                 Console.WriteLine(
                     $"ALUNO: {aluno.Nome}");
@@ -212,40 +211,29 @@ namespace Desafio_back_end
                     $"TURMA: {aluno.CodigoTurma}");
 
                 Console.WriteLine(
-                    "========================================");
-
+                    "=================================");
 
                 double soma = 0;
-
                 int quantidadeNotas = 0;
-
 
                 Console.WriteLine(
                     "\n--- NOTAS NAS 12 MATÉRIAS ---");
 
-
-                foreach (
-                    Materia materia
-                    in Enum.GetValues(
-                        typeof(Materia)))
+                foreach (Materia materia
+                    in Enum.GetValues(typeof(Materia)))
                 {
-                    if (
-                        aluno.MateriasComNota
-                            .Contains(materia))
+                    if (aluno.MateriasComNota
+                        .Contains(materia))
                     {
                         double nota =
-                            aluno.NotasPorMateria[
-                                materia];
-
+                            aluno.NotasPorMateria[materia];
 
                         Console.WriteLine(
                             $"{(int)materia} - " +
                             $"{NomeMateria(materia)}: " +
                             $"{nota:N1}");
 
-
                         soma += nota;
-
                         quantidadeNotas++;
                     }
                     else
@@ -257,12 +245,10 @@ namespace Desafio_back_end
                     }
                 }
 
-
                 if (quantidadeNotas > 0)
                 {
                     Console.WriteLine(
-                        $"\nMÉDIA DAS NOTAS " +
-                        $"REGISTRADAS: " +
+                        $"\nMÉDIA DAS NOTAS: " +
                         $"{soma / quantidadeNotas:N2}");
                 }
                 else
@@ -271,55 +257,79 @@ namespace Desafio_back_end
                         "\nMÉDIA: Ainda não existem " +
                         "notas registradas.");
                 }
+
+                Console.WriteLine(
+                    "\nPressione ENTER para continuar.");
+
+                Console.ReadLine();
             }
             catch (FormatException ex)
             {
                 Console.WriteLine(
                     $"\n[Erro de Formato]: " +
                     $"{ex.Message}");
+
+                Console.ReadLine();
             }
             catch (ArgumentException ex)
             {
                 Console.WriteLine(
                     $"\n[Erro de Validação]: " +
                     $"{ex.Message}");
+
+                Console.ReadLine();
             }
         }
 
 
-        // =========================
-        // LISTA DE ALUNOS
-        // =========================
+        // ============================================================
+        // NOME DAS MATÉRIAS
+        // ============================================================
 
-        static void ExibirDicionarioAlunos()
+        private string NomeMateria(
+            Materia materia)
         {
-            var dict =
-                servico.ObterAlunos();
-
-
-            Console.WriteLine(
-                "\n=======================================================================");
-
-            Console.WriteLine(
-                $" DICIONÁRIO DE ALUNOS " +
-                $"CADASTRADOS (Total: {dict.Count})");
-
-            Console.WriteLine(
-                "=======================================================================");
-
-
-            foreach (var item in dict)
+            switch (materia)
             {
-                Console.WriteLine(
-                    $" Chave (Matrícula): " +
-                    $"{item.Key} | " +
-                    $"Nome: {item.Value.Nome} | " +
-                    $"Turma: {item.Value.CodigoTurma}");
+                case Materia.Matematica:
+                    return "Matemática";
+
+                case Materia.Portugues:
+                    return "Português";
+
+                case Materia.Historia:
+                    return "História";
+
+                case Materia.Geografia:
+                    return "Geografia";
+
+                case Materia.Biologia:
+                    return "Biologia";
+
+                case Materia.Fisica:
+                    return "Física";
+
+                case Materia.Quimica:
+                    return "Química";
+
+                case Materia.Ingles:
+                    return "Inglês";
+
+                case Materia.Artes:
+                    return "Artes";
+
+                case Materia.EducacaoFisica:
+                    return "Educação Física";
+
+                case Materia.Filosofia:
+                    return "Filosofia";
+
+                case Materia.Sociologia:
+                    return "Sociologia";
+
+                default:
+                    return materia.ToString();
             }
-
-
-            Console.WriteLine(
-                "-----------------------------------------------------------------------");
         }
     }
 }

@@ -6,13 +6,10 @@ namespace Desafio_back_end.Services
 {
     public interface IServicoEscolar
     {
-        // =========================
-        // ALUNOS
-        // =========================
-
         Dictionary<string, Aluno> ObterAlunos();
 
-        Aluno BuscarAluno(string matricula);
+        Aluno BuscarAluno(
+            string matricula);
 
         string CadastrarAluno(
             string nome,
@@ -24,17 +21,19 @@ namespace Desafio_back_end.Services
             Materia materia,
             double nota);
 
-        (Materia Materia, List<string> Colegas)
-            ObterTurmaComMateria(string codigoTurma);
+        (
+            Materia Materia,
+            List<string> Colegas
+        )
+        ObterTurmaComMateria(
+            string codigoTurma);
 
 
-        // =========================
-        // PROFESSORES
-        // =========================
+        Dictionary<string, Professor>
+            ObterProfessores();
 
-        Dictionary<string, Professor> ObterProfessores();
-
-        Professor BuscarProfessor(string cpf);
+        Professor BuscarProfessor(
+            string cpf);
 
         Professor CadastrarProfessor(
             string nome,

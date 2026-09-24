@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Desafio_back_end.Models
+﻿namespace Desafio_back_end.Models
 {
     public enum Materia
     {
