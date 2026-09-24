@@ -1,94 +1,162 @@
-﻿using Desafio_back_end.Interface;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
-
+using Desafio_back_end.Models;
+using Desafio_back_end.Services;
 
 namespace Desafio_back_end
 {
     internal class Program
     {
-        static ServicoEscolar servico = new ServicoEscolar();
+        static IServicoEscolar servico =
+            new ServicoEscolar();
+
+
+        // =========================
+        // MENU PRINCIPAL
+        // =========================
 
         static void Main(string[] args)
         {
             string opcaoMain = "";
 
+
             do
             {
                 try
                 {
-                    Console.WriteLine("\n*** SISTEMA ESCOLAR ***");
-                    Console.WriteLine("1 - ÁREA DO ALUNO");
-                    Console.WriteLine("2 - ÁREA DO PROFESSOR");
-                    Console.WriteLine("0 - SAIR");
-                    Console.Write("Escolha uma opção: ");
+                    Console.WriteLine(
+                        "\n*** SISTEMA ESCOLAR ***");
 
-                    opcaoMain = Console.ReadLine();
+                    Console.WriteLine(
+                        "1 - ÁREA DO ALUNO");
+
+                    Console.WriteLine(
+                        "2 - ÁREA DO PROFESSOR");
+
+                    Console.WriteLine(
+                        "0 - SAIR");
+
+                    Console.Write(
+                        "Escolha uma opção: ");
+
+
+                    opcaoMain =
+                        Console.ReadLine() ?? "";
+
 
                     switch (opcaoMain)
                     {
                         case "1":
                             MenuAluno();
                             break;
+
                         case "2":
                             MenuProfessor();
                             break;
+
                         case "0":
-                            Console.WriteLine("Encerrando o programa...");
+                            Console.WriteLine(
+                                "Encerrando o programa...");
                             break;
+
                         default:
-                            Console.WriteLine("\nCaractere inválido, informe somente as opções informadas !!");
+                            Console.WriteLine(
+                                "\nOpção inválida.");
                             break;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"\n[Erro Inesperado]: {ex.Message}");
+                    Console.WriteLine(
+                        $"\n[Erro Inesperado]: " +
+                        $"{ex.Message}");
                 }
 
             } while (opcaoMain != "0");
         }
 
-        // --- MENU DO PROFESSOR ---
+
+        // =========================
+        // MENU PROFESSOR
+        // =========================
+
         static void MenuProfessor()
         {
             string opcaoProf = "";
+
 
             do
             {
                 try
                 {
-                    Console.WriteLine("\n--- MENU PROFESSOR ---");
-                    Console.WriteLine("1 - Registrar Aluno");
-                    Console.WriteLine("2 - Registrar Notas");
-                    Console.WriteLine("0 - Voltar ao Menu Principal");
-                    Console.Write("Escolha uma opção: ");
+                    Console.WriteLine(
+                        "\n--- MENU PROFESSOR ---");
 
-                    opcaoProf = Console.ReadLine();
+                    Console.WriteLine(
+                        "1 - Registrar Aluno");
+
+                    Console.WriteLine(
+                        "2 - Registrar Notas");
+
+                    Console.WriteLine(
+                        "3 - Cadastrar Professor");
+
+                    Console.WriteLine(
+                        "4 - Holerite");
+
+                    Console.WriteLine(
+                        "0 - Voltar ao Menu Principal");
+
+                    Console.Write(
+                        "Escolha uma opção: ");
+
+
+                    opcaoProf =
+                        Console.ReadLine() ?? "";
+
 
                     switch (opcaoProf)
                     {
                         case "1":
                             RegistrarAluno();
                             break;
+
                         case "2":
                             RegistrarNota();
                             break;
+
+                        case "3":
+                            RegistrarProfessor();
+                            break;
+
+                        case "4":
+                            ExibirHolerite();
+                            break;
+
                         case "0":
                             break;
+
                         default:
-                            Console.WriteLine("\nCaractere inválido, informe somente as opções informadas !!");
+                            Console.WriteLine(
+                                "\nOpção inválida.");
                             break;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"\n[Erro no Menu Professor]: {ex.Message}");
+                    Console.WriteLine(
+                        $"\n[Erro no Menu Professor]: " +
+                        $"{ex.Message}");
                 }
 
             } while (opcaoProf != "0");
         }
+
+
+        // =========================
+        // REGISTRAR ALUNO
+        // =========================
 
         static void RegistrarAluno()
         {
@@ -116,238 +184,530 @@ namespace Desafio_back_end
                 if (!Regex.IsMatch(ano, @"^[1-3]$"))
                     throw new ArgumentException("Ano inválido! Escolha entre 1, 2 ou 3.");
 
-                Console.Write("Informe o Turno do Aluno (M - Matutino, V - Vespertino, N - Noturno): ");
-                string turno = Console.ReadLine();
-                if (!Regex.IsMatch(turno, @"^[mVnMvN]$"))
-                    throw new ArgumentException("Turno inválido! Escolha entre M, V ou N.");
+                Console.Write(
+                    "Informe o CPF do Aluno (11 dígitos): ");
 
-                Console.Write("Informe a Turma do Aluno (A, B ou C): ");
-                string letraTurma = Console.ReadLine();
-                if (!Regex.IsMatch(letraTurma, @"^[a-cA-C]$"))
-                    throw new ArgumentException("Turma inválida! Escolha entre A, B ou C.");
+                string cpf =
+                    Console.ReadLine() ?? "";
 
                 string matriculaGerada = servico.CadastrarAluno(nome, cpf, dataNascimento, ano, turno, letraTurma);
 
-                Console.WriteLine($"\nALUNO CADASTRADO COM SUCESSO!");
-                Console.WriteLine($"Matrícula Gerada: {matriculaGerada}");
 
-                ExibirDicionarioAlunos();
+                Console.Write(
+                    "Informe a Data de Nascimento " +
+                    "(dd/MM/yyyy): ");
+
+                DateTime dataNascimento =
+                    ValidarData(
+                        Console.ReadLine() ?? "");
+
+
+                string matriculaGerada =
+                    servico.CadastrarAluno(
+                        nome,
+                        cpf,
+                        dataNascimento);
+
+
+                Console.WriteLine(
+                    "\nA matricula foi realizada com sucesso!");
+
+                Console.WriteLine(
+                    $"A sua Matricula é: " +
+                    $"{matriculaGerada}");
+
+                Console.WriteLine(
+                    "Use a matricula para ter acesso " +
+                    "ao seu sistema de aluno.");
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(
+                    $"\n[Erro de Formato]: " +
+                    $"{ex.Message}");
             }
             catch (ArgumentException ex)
             {
-                Console.WriteLine($"\n[Erro de Validação]: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"\n[Erro Inesperado]: {ex.Message}");
+                Console.WriteLine(
+                    $"\n[Erro de Validação]: " +
+                    $"{ex.Message}");
             }
         }
+
+
+        // =========================
+        // REGISTRAR PROFESSOR
+        // =========================
+
+        static void RegistrarProfessor()
+        {
+            try
+            {
+                Console.WriteLine(
+                    "\n--- REGISTRO DE PROFESSOR ---");
+
+
+                Console.Write(
+                    "Digite o Nome do Professor: ");
+
+                string nome =
+                    Console.ReadLine() ?? "";
+
+                ValidarNome(nome);
+
+
+                Console.Write(
+                    "Informe o CPF do Professor " +
+                    "(11 dígitos): ");
+
+                string cpf =
+                    Console.ReadLine() ?? "";
+
+                ValidarCPF(cpf);
+
+
+                Console.Write(
+                    "Informe a Data de Nascimento " +
+                    "(dd/MM/yyyy): ");
+
+                DateTime dataNascimento =
+                    ValidarData(
+                        Console.ReadLine() ?? "");
+
+
+                Professor professor =
+                    servico.CadastrarProfessor(
+                        nome,
+                        cpf,
+                        dataNascimento);
+
+
+                Console.WriteLine(
+                    "\ncadastro de professor(A) " +
+                    "feito com sucesso");
+
+
+                Console.WriteLine(
+                    $"Salário Base: " +
+                    $"R$ {Professor.SalarioBase:N2}");
+
+
+                if (professor.Turmas.Count > 0)
+                {
+                    Console.WriteLine(
+                        "Salas/Turmas atribuídas: " +
+                        $"{string.Join(
+                            ", ",
+                            professor.Turmas)}");
+                }
+                else
+                {
+                    Console.WriteLine(
+                        "Nenhuma sala/turma foi atribuída.");
+                }
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine(
+                    $"\n[Erro de Formato]: " +
+                    $"{ex.Message}");
+            }
+            catch (ArgumentException ex)
+            {
+                Console.WriteLine(
+                    $"\n[Erro de Validação]: " +
+                    $"{ex.Message}");
+            }
+        }
+
+
+        // =========================
+        // REGISTRAR NOTA
+        // =========================
 
         static void RegistrarNota()
         {
             try
             {
-                Console.WriteLine("\n--- REGISTRO DE NOTA ---");
+                Console.WriteLine(
+                    "\n--- REGISTRO DE NOTA ---");
+
+
                 ExibirDicionarioAlunos();
 
-                Console.Write("Informe a Matrícula do aluno para registrar a nota (6 dígitos): ");
-                string mat = Console.ReadLine();
-                ValidarMatriculaFormat(mat);
 
-                Aluno aluno = servico.BuscarAluno(mat);
+                Console.Write(
+                    "Informe a Matrícula do aluno " +
+                    "(6 dígitos): ");
+
+                string matricula =
+                    Console.ReadLine() ?? "";
+
+                ValidarMatriculaFormat(
+                    matricula);
+
+
+                Aluno aluno =
+                    servico.BuscarAluno(
+                        matricula);
+
+
                 if (aluno == null)
                 {
-                    Console.WriteLine("\nAluno não encontrado para a matrícula informada!");
+                    Console.WriteLine(
+                        "\nAluno não encontrado!");
+
                     return;
                 }
 
-                Console.Write($"Digite a nota para o aluno {aluno.Nome} (0 a 10): ");
-                string inputNota = Console.ReadLine();
 
-                if (!double.TryParse(inputNota, out double nota) || nota < 0 || nota > 10)
+                Console.WriteLine(
+                    "\n--- MATÉRIAS ---");
+
+
+                foreach (
+                    Materia materia
+                    in Enum.GetValues(
+                        typeof(Materia)))
                 {
-                    throw new FormatException("A nota deve ser um valor numérico válido entre 0 e 10!");
+                    Console.WriteLine(
+                        $"{(int)materia} = " +
+                        $"{NomeMateria(materia)}");
                 }
 
-                aluno.Notas.Add(nota);
-                Console.WriteLine($"\nNota {nota} atribuída com sucesso ao aluno {aluno.Nome}!");
+
+                Console.Write(
+                    "\nInforme o número da matéria: ");
+
+
+                if (
+                    !int.TryParse(
+                        Console.ReadLine(),
+                        out int codigoMateria)
+                    ||
+                    !Enum.IsDefined(
+                        typeof(Materia),
+                        codigoMateria))
+                {
+                    throw new FormatException(
+                        "Matéria inválida. " +
+                        "Escolha um número de 1 a 12.");
+                }
+
+
+                Materia materiaSelecionada =
+                    (Materia)codigoMateria;
+
+
+                Console.Write(
+                    $"Digite a nota de " +
+                    $"{NomeMateria(materiaSelecionada)} " +
+                    $"para {aluno.Nome} (0 a 10): ");
+
+
+                if (
+                    !double.TryParse(
+                        Console.ReadLine(),
+                        NumberStyles.Float,
+                        CultureInfo.GetCultureInfo(
+                            "pt-BR"),
+                        out double nota))
+                {
+                    throw new FormatException(
+                        "A nota deve ser um número válido.");
+                }
+
+
+                if (nota < 0 || nota > 10)
+                {
+                    throw new FormatException(
+                        "A nota deve estar entre 0 e 10.");
+                }
+
+
+                servico.RegistrarNota(
+                    matricula,
+                    materiaSelecionada,
+                    nota);
+
+
+                Console.WriteLine(
+                    $"\nNota {nota:N1} " +
+                    "registrada com sucesso!");
+
+                Console.WriteLine(
+                    $"Matéria: " +
+                    $"{NomeMateria(materiaSelecionada)}");
+
+                Console.WriteLine(
+                    $"Aluno: {aluno.Nome}");
             }
             catch (FormatException ex)
             {
-                Console.WriteLine($"\n[Erro de Formato]: {ex.Message}");
+                Console.WriteLine(
+                    $"\n[Erro de Formato]: " +
+                    $"{ex.Message}");
             }
             catch (ArgumentException ex)
             {
-                Console.WriteLine($"\n[Erro de Validação]: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"\n[Erro Inesperado]: {ex.Message}");
+                Console.WriteLine(
+                    $"\n[Erro de Validação]: " +
+                    $"{ex.Message}");
             }
         }
 
-        // --- MENU DO ALUNO ---
-        static void MenuAluno()
+
+        // =========================
+        // HOLERITE
+        // =========================
+
+        static void ExibirHolerite()
         {
-            string opcaoAluno = "";
-
-            do
+            try
             {
-                try
+                Console.WriteLine(
+                    "\n--- HOLERITE DO PROFESSOR ---");
+
+
+                Console.Write(
+                    "Informe o CPF do professor: ");
+
+                string cpf =
+                    Console.ReadLine() ?? "";
+
+                ValidarCPF(cpf);
+
+
+                Professor professor =
+                    servico.BuscarProfessor(cpf);
+
+
+                if (professor == null)
                 {
-                    Console.WriteLine("\n--- MENU ALUNO ---");
-                    Console.WriteLine("1 - Verificar Turma");
-                    Console.WriteLine("2 - Ver Notas");
-                    Console.Write("Escolha uma opção: ");
+                    Console.WriteLine(
+                        "\nProfessor não encontrado.");
 
-                    opcaoAluno = Console.ReadLine();
+                    return;
+                }
 
-                    switch (opcaoAluno)
+
+                Console.WriteLine(
+                    "\n========================================");
+
+                Console.WriteLine(
+                    "              HOLERITE");
+
+                Console.WriteLine(
+                    "========================================");
+
+
+                Console.WriteLine(
+                    $"Professor: {professor.Nome}");
+
+                Console.WriteLine(
+                    $"CPF: {professor.CPF}");
+
+                Console.WriteLine(
+                    $"Salário Base: " +
+                    $"R$ {Professor.SalarioBase:N2}");
+
+
+                Console.WriteLine(
+                    "\nSalas/Turmas em que deu aula:");
+
+
+                if (professor.Turmas.Count == 0)
+                {
+                    Console.WriteLine(
+                        "- Nenhuma turma atribuída.");
+                }
+                else
+                {
+                    foreach (
+                        string turma
+                        in professor.Turmas)
                     {
-                        case "1":
-                            ExibirTurmaAluno();
-                            break;
-                        case "2":
-                            ExibirNotasAluno();
-                            break;
-                        case "0":
-                            break;
-                        default:
-                            Console.WriteLine("\nCaractere inválido, informe somente as opções informadas !!");
-                            break;
+                        Console.WriteLine(
+                            $"- {turma}");
                     }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"\n[Erro no Menu Aluno]: {ex.Message}");
-                }
 
-            } while (opcaoAluno != "0");
-        }
 
-        static void ExibirTurmaAluno()
-        {
-            try
-            {
-                Console.WriteLine("\n--- VERIFICAR TURMA DO ALUNO ---");
-                Console.Write("Informe sua Matrícula (6 dígitos): ");
-                string mat = Console.ReadLine();
-                ValidarMatriculaFormat(mat);
-
-                Aluno aluno = servico.BuscarAluno(mat);
-                if (aluno == null)
-                {
-                    Console.WriteLine("\nMatrícula não cadastrada no sistema!");
-                    return;
-                }
-
-                var dadosTurma = servico.ObterTurmaComMateria(aluno.CodigoTurma);
-
-                Console.WriteLine($"\n==================================================");
-                Console.WriteLine($" ALUNO: {aluno.Nome} | MATRÍCULA: {aluno.Matricula}");
-                Console.WriteLine($" TURMA: {aluno.CodigoTurma} | MATÉRIA SORTEADA: {dadosTurma.Materia.ToUpper()}");
-                Console.WriteLine($"==================================================");
-                Console.WriteLine($" LISTA DE ALUNOS DA TURMA ({dadosTurma.Colegas.Count} Integrantes):");
-
-                foreach (var colega in dadosTurma.Colegas)
-                {
-                    Console.WriteLine($" - {colega}");
-                }
+                Console.WriteLine(
+                    "========================================");
             }
             catch (FormatException ex)
             {
-                Console.WriteLine($"\n[Erro de Formato]: {ex.Message}");
+                Console.WriteLine(
+                    $"\n[Erro de Formato]: " +
+                    $"{ex.Message}");
             }
             catch (ArgumentException ex)
             {
-                Console.WriteLine($"\n[Erro de Validação]: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"\n[Erro Inesperado]: {ex.Message}");
+                Console.WriteLine(
+                    $"\n[Erro de Validação]: " +
+                    $"{ex.Message}");
             }
         }
 
-        static void ExibirNotasAluno()
-        {
-            try
-            {
-                Console.WriteLine("\n--- CONSULTA DE NOTAS ---");
-                Console.Write("Informe sua Matrícula (6 dígitos): ");
-                string mat = Console.ReadLine();
-                ValidarMatriculaFormat(mat);
+        MenuAluno opMenuAluno = new MenuAluno();
 
-                Aluno aluno = servico.BuscarAluno(mat);
-                if (aluno == null)
-                {
-                    Console.WriteLine("\nMatrícula não cadastrada no sistema!");
-                    return;
-                }
 
-                Console.WriteLine($"\n========================================");
-                Console.WriteLine($"ALUNO: {aluno.Nome} | MATRÍCULA: {aluno.Matricula} | TURMA: {aluno.CodigoTurma}");
-                Console.WriteLine($"========================================");
-
-                Console.WriteLine("\n--- NOTAS NAS 12 MATÉRIAS ---");
-                double soma = 0;
-                foreach (var item in aluno.NotasPorMateria)
-                {
-                    Console.WriteLine($"{item.Key}: {item.Value}");
-                    soma += item.Value;
-                }
-
-                Console.WriteLine($"\nMÉDIA GERAL: {Math.Round(soma / aluno.NotasPorMateria.Count, 2)}");
-
-                if (aluno.Notas.Count > 0)
-                {
-                    Console.WriteLine($"Notas registradas pelo professor: {string.Join(", ", aluno.Notas)}");
-                }
-            }
-            catch (FormatException ex)
-            {
-                Console.WriteLine($"\n[Erro de Formato]: {ex.Message}");
-            }
-            catch (ArgumentException ex)
-            {
-                Console.WriteLine($"\n[Erro de Validação]: {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"\n[Erro Inesperado]: {ex.Message}");
-            }
-        }
-
-        // --- MÉTODOS AUXILIARES ---
-        static void ExibirDicionarioAlunos()
-        {
-            var dict = servico.ObterAlunos();
-            Console.WriteLine($"\n=======================================================================");
-            Console.WriteLine($" DICIONÁRIO DE ALUNOS CADASTRADOS (Total: {dict.Count})");
-            Console.WriteLine($"=======================================================================");
-
-            foreach (KeyValuePair<string, Aluno> item in dict)
-            {
-                Console.WriteLine($" Chave (Matrícula): {item.Key} | Nome: {item.Value.Nome} | Turma: {item.Value.CodigoTurma}");
-            }
-            Console.WriteLine($"-----------------------------------------------------------------------\n");
-        }
+        // =========================
+        // VALIDAÇÕES
+        // =========================
 
         static void ValidarNome(string nome)
         {
             if (string.IsNullOrWhiteSpace(nome))
-                throw new ArgumentException("O nome não pode estar em branco.");
+            {
+                throw new ArgumentException(
+                    "O nome não pode estar em branco.");
+            }
 
-            if (!Regex.IsMatch(nome, @"^[a-zA-ZÀ-ÿ\s]+$"))
-                throw new ArgumentException("O nome não pode conter números ou caracteres especiais!");
+            if (
+                !Regex.IsMatch(
+                    nome,
+                    @"^[a-zA-ZÀ-ÿ\s]+$"))
+            {
+                throw new ArgumentException(
+                    "O nome não pode conter " +
+                    "números ou caracteres especiais!");
+            }
         }
 
-        static void ValidarMatriculaFormat(string matricula)
-        {
-            if (string.IsNullOrWhiteSpace(matricula))
-                throw new ArgumentException("A matrícula é obrigatória.");
 
-            if (!Regex.IsMatch(matricula, @"^\d{6}$"))
-                throw new FormatException("A matrícula deve conter exatamente 6 dígitos numéricos!");
+        static void ValidarCPF(string cpf)
+        {
+            if (string.IsNullOrWhiteSpace(cpf))
+            {
+                throw new ArgumentException(
+                    "O CPF é obrigatório.");
+            }
+
+
+            if (
+                !Regex.IsMatch(
+                    cpf,
+                    @"^\d{11}$"))
+            {
+                throw new FormatException(
+                    "O CPF deve conter " +
+                    "exatamente 11 dígitos numéricos!");
+            }
+        }
+
+
+        static DateTime ValidarData(
+            string dataTexto)
+        {
+            if (string.IsNullOrWhiteSpace(
+                dataTexto))
+            {
+                throw new ArgumentException(
+                    "A data de nascimento " +
+                    "é obrigatória.");
+            }
+
+
+            if (
+                !DateTime.TryParseExact(
+                    dataTexto,
+                    "dd/MM/yyyy",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out DateTime data))
+            {
+                throw new FormatException(
+                    "Data inválida! " +
+                    "Use o formato dd/MM/yyyy.");
+            }
+
+
+            if (data > DateTime.Today)
+            {
+                throw new ArgumentException(
+                    "A data de nascimento " +
+                    "não pode ser no futuro.");
+            }
+
+
+            return data;
+        }
+
+
+        static void ValidarMatriculaFormat(
+            string matricula)
+        {
+            if (
+                string.IsNullOrWhiteSpace(
+                    matricula))
+            {
+                throw new ArgumentException(
+                    "A matrícula é obrigatória.");
+            }
+
+
+            if (
+                !Regex.IsMatch(
+                    matricula,
+                    @"^\d{6}$"))
+            {
+                throw new FormatException(
+                    "A matrícula deve conter " +
+                    "exatamente 6 dígitos numéricos!");
+            }
+        }
+
+
+        // =========================
+        // NOME DAS MATÉRIAS
+        // =========================
+
+        static string NomeMateria(
+            Materia materia)
+        {
+            switch (materia)
+            {
+                case Materia.Matematica:
+                    return "Matemática";
+
+                case Materia.Portugues:
+                    return "Português";
+
+                case Materia.Historia:
+                    return "História";
+
+                case Materia.Geografia:
+                    return "Geografia";
+
+                case Materia.Biologia:
+                    return "Biologia";
+
+                case Materia.Fisica:
+                    return "Física";
+
+                case Materia.Quimica:
+                    return "Química";
+
+                case Materia.Ingles:
+                    return "Inglês";
+
+                case Materia.Artes:
+                    return "Artes";
+
+                case Materia.EducacaoFisica:
+                    return "Educação Física";
+
+                case Materia.Filosofia:
+                    return "Filosofia";
+
+                case Materia.Sociologia:
+                    return "Sociologia";
+
+                default:
+                    return materia.ToString();
+            }
         }
     }
 }
