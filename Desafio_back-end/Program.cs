@@ -1,7 +1,4 @@
-﻿using Desafio_back_end.Menus
-using Desafio_back_end.Models;
-using Desafio_back_end.Services;
-using System;
+﻿using Desafio_back_end.Services;
 using System.Globalization;
 using System.Text.RegularExpressions;
 
