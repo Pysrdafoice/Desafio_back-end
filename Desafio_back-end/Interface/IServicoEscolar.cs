@@ -1,36 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using Desafio_back_end.Models;
 
-namespace Desafio_back_end.Services
+namespace Desafio_back_end.Interface
 {
     public interface IServicoEscolar
     {
+        // --- Alunos ---
         Dictionary<string, Aluno> ObterAlunos();
-
         Aluno BuscarAluno(string matricula);
+        string CadastrarAluno(string nome, string cpf, DateTime dataNascimento, string ano, string turno, string letraTurma);
+        (string Materia, List<string> Colegas) ObterTurmaComMateria(string codigoTurma);
 
-        string CadastrarAluno(
-            string nome,
-            string cpf,
-            DateTime dataNascimento);
-
-        void RegistrarNota(
-            string matricula,
-            Materia materia,
-            double nota);
-
-        (Materia Materia, List<string> Colegas)
-            ObterTurmaComMateria(string codigoTurma);
-
-
-        Dictionary<string, Professor> ObterProfessores();
-
-        Professor BuscarProfessor(string cpf);
-
-        Professor CadastrarProfessor(
-            string nome,
-            string cpf,
-            DateTime dataNascimento);
+        // --- Professores ---
+        //Dictionary<string, Professor> ObterProfessores();
+        //Professor BuscarProfessor(string matricula);
+        //string CadastrarProfessor(string nome, string cpf, DateTime dataNascimento, double salario, List<string> turmas);
     }
 }
