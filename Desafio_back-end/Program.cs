@@ -127,6 +127,8 @@ namespace Desafio_back_end
                     "Use o formato dd/MM/yyyy.");
             }
 
+            //não está funcionando essa Validação
+            //Está passando data acima de 100, data de hj e data Futura
             if (data > DateTime.Today)
             {
                 throw new ArgumentException(
@@ -134,7 +136,15 @@ namespace Desafio_back_end
                     "ser no futuro.");
             }
 
-            return data;
+            //if (year < 1 || year > 9999)
+            //{
+            //    ThrowHelper.ThrowArgumentOutOfRange_Year();
+            //}
+            //if ((year & 3) != 0) return false;
+            //if ((year & 15) == 0) return true;
+            //return (uint)year % 25 != 0;
+
+            //return data;
         }
 
 
