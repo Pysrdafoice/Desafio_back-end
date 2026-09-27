@@ -106,8 +106,7 @@ namespace Desafio_back_end
         }
 
 
-        public static DateTime ValidarData(
-            string dataTexto)
+        public static DateTime ValidarData(string dataTexto)
         {
             if (string.IsNullOrWhiteSpace(dataTexto))
             {
@@ -123,20 +122,26 @@ namespace Desafio_back_end
                 out DateTime data))
             {
                 throw new FormatException(
-                    "Data inválida! " +
-                    "Use o formato dd/MM/yyyy.");
+                    "Data inválida! Use o formato dd/MM/yyyy.");
             }
 
             if (data > DateTime.Today)
             {
                 throw new ArgumentException(
-                    "A data de nascimento não pode " +
-                    "ser no futuro.");
+                    "A data de nascimento não pode ser no futuro.");
+            }
+
+            DateTime dataMinima =
+                DateTime.Today.AddYears(-80);
+
+            if (data < dataMinima)
+            {
+                throw new ArgumentException(
+                    "A pessoa não pode ter mais de 80 anos.");
             }
 
             return data;
         }
-
 
         public static void ValidarMatriculaFormat(
             string matricula)
