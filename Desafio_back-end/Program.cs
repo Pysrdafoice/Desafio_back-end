@@ -125,6 +125,8 @@ namespace Desafio_back_end
                     "Data inválida! Use o formato dd/MM/yyyy.");
             }
 
+            //não está funcionando essa Validação
+            //Está passando data acima de 100, data de hj e data Futura
             if (data > DateTime.Today)
             {
                 throw new ArgumentException(
@@ -140,7 +142,15 @@ namespace Desafio_back_end
                     "A pessoa não pode ter mais de 80 anos.");
             }
 
-            return data;
+            //if (year < 1 || year > 9999)
+            //{
+            //    ThrowHelper.ThrowArgumentOutOfRange_Year();
+            //}
+            //if ((year & 3) != 0) return false;
+            //if ((year & 15) == 0) return true;
+            //return (uint)year % 25 != 0;
+
+            //return data;
         }
 
         public static void ValidarMatriculaFormat(
