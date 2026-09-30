@@ -213,9 +213,6 @@ namespace Desafio_back_end
                 Console.WriteLine(
                     "=================================");
 
-                double soma = 0;
-                int quantidadeNotas = 0;
-
                 Console.WriteLine(
                     "\n--- NOTAS NAS 12 MATÉRIAS ---");
 
@@ -232,9 +229,6 @@ namespace Desafio_back_end
                             $"{(int)materia} - " +
                             $"{NomeMateria(materia)}: " +
                             $"{nota:N1}");
-
-                        soma += nota;
-                        quantidadeNotas++;
                     }
                     else
                     {
@@ -245,11 +239,37 @@ namespace Desafio_back_end
                     }
                 }
 
-                if (quantidadeNotas > 0)
+                // ========================================================
+                // MÉDIA E SITUAÇÃO DO ALUNO
+                // ========================================================
+
+                if (aluno.NotasPorMateria.Count > 0)
                 {
+                    double media =
+                        servico.CalcularMedia(matricula);
+
                     Console.WriteLine(
-                        $"\nMÉDIA DAS NOTAS: " +
-                        $"{soma / quantidadeNotas:N2}");
+                        "\n=================================");
+
+                    Console.WriteLine(
+                        $"MÉDIA DAS NOTAS: {media:N2}");
+
+                    // Média mínima para aprovação
+                    double mediaMinima = 7;
+
+                    if (media >= mediaMinima)
+                    {
+                        Console.WriteLine(
+                            "SITUAÇÃO: Aluno aprovado");
+                    }
+                    else
+                    {
+                        Console.WriteLine(
+                            "SITUAÇÃO: Aluno reprovado");
+                    }
+
+                    Console.WriteLine(
+                        "=================================");
                 }
                 else
                 {
@@ -280,7 +300,6 @@ namespace Desafio_back_end
                 Console.ReadLine();
             }
         }
-
 
         // ============================================================
         // NOME DAS MATÉRIAS

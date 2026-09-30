@@ -125,32 +125,46 @@ namespace Desafio_back_end
                     "Data inválida! Use o formato dd/MM/yyyy.");
             }
 
-            //não está funcionando essa Validação
-            //Está passando data acima de 100, data de hj e data Futura
-            if (data > DateTime.Today)
+            // ============================================================
+            // DATA FUTURA OU DATA DE HOJE
+            // ============================================================
+
+            if (data >= DateTime.Today)
             {
                 throw new ArgumentException(
-                    "A data de nascimento não pode ser no futuro.");
+                    "A data de nascimento deve ser anterior à data de hoje.");
             }
 
-            DateTime dataMinima =
-                DateTime.Today.AddYears(-80);
 
-            if (data < dataMinima)
+            // ============================================================
+            // CÁLCULO DA IDADE
+            // ============================================================
+
+            int idade =
+                DateTime.Today.Year - data.Year;
+
+            // Se a pessoa ainda não fez aniversário este ano,
+            // diminuímos 1 ano da idade.
+            if (data.Date >
+                DateTime.Today.AddYears(-idade))
+            {
+                idade--;
+            }
+
+
+            // ============================================================
+            // LIMITE DE IDADE
+            // ============================================================
+
+            if (idade > 70)
             {
                 throw new ArgumentException(
-                    "A pessoa não pode ter mais de 80 anos.");
+                    "A pessoa não pode ter mais de 7" +
+                    "0 anos.");
             }
 
-            //if (year < 1 || year > 9999)
-            //{
-            //    ThrowHelper.ThrowArgumentOutOfRange_Year();
-            //}
-            //if ((year & 3) != 0) return false;
-            //if ((year & 15) == 0) return true;
-            //return (uint)year % 25 != 0;
 
-            //return data;
+            return data;
         }
 
         public static void ValidarMatriculaFormat(

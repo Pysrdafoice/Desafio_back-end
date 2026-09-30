@@ -90,9 +90,9 @@ namespace Desafio_back_end.Services
 
 
         public void RegistrarNota(
-            string matricula,
-            Materia materia,
-            double nota)
+        string matricula,
+        Materia materia,
+        double nota)
         {
             Aluno aluno =
                 BuscarAluno(matricula);
@@ -103,19 +103,42 @@ namespace Desafio_back_end.Services
                     "Aluno não encontrado.");
             }
 
-
+            // A nota deve estar entre 0 e 10
             if (nota < 0 || nota > 10)
             {
                 throw new ArgumentException(
-                    "A nota deve estar entre 0 e 10.");
+                    "Valor invalido, informe valor de 0 a 10, tente novamente");
             }
 
+            // Registra ou atualiza a nota
+            aluno.NotasPorMateria[materia] = nota;
 
-            aluno.NotasPorMateria[materia] =
-                nota;
+            // Evita duplicar a matéria
+            if (!aluno.MateriasComNota.Contains(materia))
+            {
+                aluno.MateriasComNota.Add(materia);
+            }
+        }
+        public double CalcularMedia(
+    string matricula)
+        {
+            Aluno aluno =
+                BuscarAluno(matricula);
 
-            aluno.MateriasComNota.Add(
-                materia);
+            if (aluno == null)
+            {
+                throw new ArgumentException(
+                    "Aluno não encontrado.");
+            }
+
+            if (aluno.NotasPorMateria.Count == 0)
+            {
+                return 0;
+            }
+
+            return aluno.NotasPorMateria
+                .Values
+                .Average();
         }
 
 
@@ -412,5 +435,6 @@ namespace Desafio_back_end.Services
 
             return materias[indice];
         }
+
     }
 }

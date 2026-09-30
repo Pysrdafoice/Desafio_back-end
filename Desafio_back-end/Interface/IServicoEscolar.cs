@@ -20,7 +20,8 @@ namespace Desafio_back_end.Services
             string matricula,
             Materia materia,
             double nota);
-
+        double CalcularMedia(
+        string matricula);
         (
             Materia Materia,
             List<string> Colegas
